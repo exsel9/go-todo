@@ -15,8 +15,8 @@
             <div class="card-body">
                 <form action="/add" method="post">
                     <div class="form-group">
-                        <label for="Item">Item</label>
-                        <input type="text" class="form-control" name="item" placeholder="What do you want to do?">
+                        <label for="item">Item</label>
+                        <input type="text" class="form-control" id="item" placeholder="What do you want to do?">
                         <small class="form-text text-muted">Enter what you want to procastinate 🙂</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -33,9 +33,8 @@
                 <table class="table table-borderless">
                     <thead>
                     <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,7 +42,6 @@
                         {{if .Completed}}
                             <tr>
                                 <td><strike>{{.Item}}</strike></td>
-                                <td>Completed</td>
                                 <td>
                                     <a href="/un-complete/{{ .Id}}"><button class="btn btn-primary">UnComplete</button></a>
                                     <button class="btn btn-danger" disabled>Delete</button>
@@ -52,7 +50,6 @@
                         {{else}}
                             <tr>
                                 <td>{{.Item}}</td>
-                                <td>Not Completed</td>
                                 <td>
                                     <a href="/complete/{{ .Id}}"><button class="btn btn-primary">Complete</button></a>
                                     <a href="/delete/{{ .Id}}"><button class="btn btn-danger">Delete</button></a>
