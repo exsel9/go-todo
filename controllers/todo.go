@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/ichtrojan/go-todo/config"
 	"github.com/ichtrojan/go-todo/models"
+	log "github.com/sirupsen/logrus"
 	"html/template"
+	"io"
 	"net/http"
 )
 
@@ -17,11 +18,11 @@ var (
 	database  = config.Database()
 )
 
-func Show(w http.ResponseWriter, r *http.Request) {
+func Show(w http.ResponseWriter, _ *http.Request) {
 	statement, err := database.Query(`SELECT * FROM todos`)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	var todos []models.Todo
@@ -30,7 +31,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		err = statement.Scan(&id, &item, &completed)
 
 		if err != nil {
-			fmt.Println(err)
+			log.Error(err)
 		}
 
 		todo := models.Todo{
@@ -56,7 +57,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	_, err := database.Exec(`INSERT INTO todos (item) VALUE (?)`, item)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	http.Redirect(w, r, "/", 302)
@@ -69,7 +70,7 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	_, err := database.Exec(`DELETE FROM todos WHERE id = ?`, id)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	http.Redirect(w, r, "/", 302)
@@ -82,7 +83,7 @@ func Complete(w http.ResponseWriter, r *http.Request) {
 	_, err := database.Exec(`UPDATE todos SET completed = 1 WHERE id = ?`, id)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	http.Redirect(w, r, "/", 302)
@@ -95,8 +96,17 @@ func UnComplete(w http.ResponseWriter, r *http.Request) {
 	_, err := database.Exec(`UPDATE todos SET completed = 0 WHERE id = ?`, id)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	http.Redirect(w, r, "/", 302)
+}
+
+func Healthz(w http.ResponseWriter, _ *http.Request) {
+	log.Info("API Health is OK")
+	w.Header().Set("Content-Type", "application/json")
+	_, err := io.WriteString(w, `{"alive": true}`)
+	if err != nil {
+		log.Error(err)
+	}
 }
