@@ -8,6 +8,11 @@ import (
 	"os"
 )
 
+func init() {
+	log.SetFormatter(&log.TextFormatter{})
+	log.SetReportCaller(true)
+}
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("No .env file found")
@@ -18,6 +23,8 @@ func main() {
 	if !exist {
 		log.Fatal("PORT not set in .env")
 	}
+
+	log.Info("Starting Todolist API server")
 
 	err := http.ListenAndServe(":"+port, routes.Init())
 

@@ -10,28 +10,7 @@ import (
 )
 
 func Database() *sql.DB {
-	user, exist := os.LookupEnv("DB_USER")
-
-	if !exist {
-		log.Fatal("DB_USER not set in .env")
-	}
-
-	pass, exist := os.LookupEnv("DB_PASS")
-
-	if !exist {
-		log.Fatal("DB_PASS not set in .env")
-	}
-
-	host, exist := os.LookupEnv("DB_HOST")
-
-	if !exist {
-		log.Fatal("DB_HOST not set in .env")
-	}
-
-	credentials := fmt.Sprintf("%s:%s@(%s:3306)/?charset=utf8&parseTime=True", user, pass, host)
-
-	database, err := sql.Open("mysql", credentials)
-
+	database, err := sql.Open("mysql", credentials())
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -64,4 +43,28 @@ func Database() *sql.DB {
 	}
 
 	return database
+}
+
+func credentials() string {
+	user, ok := os.LookupEnv("DB_USER")
+	if !ok {
+		log.Fatal("DB_USER not set in .env")
+	}
+
+	pass, ok := os.LookupEnv("DB_PASS")
+	if !ok {
+		log.Fatal("DB_PASS not set in .env")
+	}
+
+	host, ok := os.LookupEnv("DB_HOST")
+	if !ok {
+		log.Fatal("DB_HOST not set in .env")
+	}
+
+	port, ok := os.LookupEnv("DB_PORT")
+	if !ok {
+		log.Fatal("DB_PORT not set in .env")
+	}
+
+	return fmt.Sprintf("%s:%s@(%s:%s)/?charset=utf8&parseTime=True", user, pass, host, port)
 }
