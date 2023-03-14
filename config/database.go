@@ -2,36 +2,29 @@ package config
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/ichtrojan/thoth"
 	_ "github.com/joho/godotenv/autoload"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 )
 
 func Database() *sql.DB {
-	logger, _ := thoth.Init("log")
-
 	user, exist := os.LookupEnv("DB_USER")
 
 	if !exist {
-		logger.Log(errors.New("DB_USER not set in .env"))
 		log.Fatal("DB_USER not set in .env")
 	}
 
 	pass, exist := os.LookupEnv("DB_PASS")
 
 	if !exist {
-		logger.Log(errors.New("DB_PASS not set in .env"))
 		log.Fatal("DB_PASS not set in .env")
 	}
 
 	host, exist := os.LookupEnv("DB_HOST")
 
 	if !exist {
-		logger.Log(errors.New("DB_HOST not set in .env"))
 		log.Fatal("DB_HOST not set in .env")
 	}
 
@@ -40,22 +33,21 @@ func Database() *sql.DB {
 	database, err := sql.Open("mysql", credentials)
 
 	if err != nil {
-		logger.Log(err)
 		log.Fatal(err)
 	} else {
-		fmt.Println("Database Connection Successful")
+		log.Info("Database Connection Successful")
 	}
 
 	_, err = database.Exec(`CREATE DATABASE IF NOT EXISTS gotodo`)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	_, err = database.Exec(`USE gotodo`)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	_, err = database.Exec(`
@@ -68,7 +60,7 @@ func Database() *sql.DB {
 	`)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 
 	return database
