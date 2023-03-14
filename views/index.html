@@ -16,7 +16,7 @@
                 <form action="/add" method="post">
                     <div class="form-group">
                         <label for="item">Item</label>
-                        <input type="text" class="form-control" id="item" placeholder="What do you want to do?">
+                        <input type="text" class="form-control" id="item" name="item" placeholder="What do you want to do?">
                         <small class="form-text text-muted">Enter what you want to procastinate 🙂</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -43,7 +43,7 @@
                             <tr>
                                 <td><strike>{{.Item}}</strike></td>
                                 <td>
-                                    <a href="/un-complete/{{ .Id}}"><button class="btn btn-primary">UnComplete</button></a>
+                                    <a href="/un-complete/{{ .Id}}"><input type="checkbox" id="un-complete-check-box" checked></a>
                                     <button class="btn btn-danger" disabled>Delete</button>
                                 </td>
                             </tr>
@@ -51,7 +51,7 @@
                             <tr>
                                 <td>{{.Item}}</td>
                                 <td>
-                                    <a href="/complete/{{ .Id}}"><button class="btn btn-primary">Complete</button></a>
+                                    <a href="/complete/{{ .Id}}"><input type="checkbox" id="complete-check-box"></a>
                                     <a href="/delete/{{ .Id}}"><button class="btn btn-danger">Delete</button></a>
                                 </td>
                             </tr>
