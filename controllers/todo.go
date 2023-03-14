@@ -102,7 +102,7 @@ func UnComplete(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 302)
 }
 
-func Healthz(w http.ResponseWriter, _ *http.Request) {
+func Ping(w http.ResponseWriter, _ *http.Request) {
 	log.Info("API Health is OK")
 	w.Header().Set("Content-Type", "application/json")
 	_, err := io.WriteString(w, `{"alive": true}`)

@@ -13,7 +13,7 @@ func Init() *mux.Router {
 	route.HandleFunc("/delete/{id}", controllers.Delete)
 	route.HandleFunc("/complete/{id}", controllers.Complete)
 	route.HandleFunc("/un-complete/{id}", controllers.UnComplete)
-	route.HandleFunc("/healthz", controllers.Healthz)
+	route.HandleFunc("/ping", controllers.Ping)
 
 	return route
 }
