@@ -17,7 +17,7 @@ var (
 )
 
 func Show(w http.ResponseWriter, _ *http.Request) {
-	todos := itemDAO.All()
+	todos := itemDAO.NotCompleted()
 
 	data := models.View{
 		Todos: todos,
