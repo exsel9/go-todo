@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/ichtrojan/go-todo/config"
 	"github.com/ichtrojan/go-todo/item_dao"
-	"github.com/ichtrojan/go-todo/models"
 	log "github.com/sirupsen/logrus"
 	"html/template"
 	"io"
@@ -16,14 +15,16 @@ var (
 	itemDAO  = item_dao.New(database)
 )
 
-func Show(w http.ResponseWriter, _ *http.Request) {
+func NotCompleted(w http.ResponseWriter, _ *http.Request) {
 	todos := itemDAO.NotCompleted()
 
-	data := models.View{
-		Todos: todos,
-	}
+	_ = view.Execute(w, todos)
+}
 
-	_ = view.Execute(w, data)
+func All(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.All()
+
+	_ = view.Execute(w, todos)
 }
 
 func Add(w http.ResponseWriter, r *http.Request) {

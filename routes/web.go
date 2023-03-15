@@ -8,7 +8,8 @@ import (
 func Init() *mux.Router {
 	route := mux.NewRouter()
 
-	route.HandleFunc("/", controllers.Show)
+	route.HandleFunc("/", controllers.NotCompleted)
+	route.HandleFunc("/all", controllers.All)
 	route.HandleFunc("/ping", controllers.Ping)
 	route.HandleFunc("/add", controllers.Add).Methods("POST")
 
