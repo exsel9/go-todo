@@ -48,7 +48,7 @@ func (dao *DAO) MarkAsUnComplete(id string) {
 
 func (dao *DAO) All() []*models.Todo {
 	var (
-		id        int
+		id        int64
 		item      string
 		completed int
 		focused   int
@@ -72,7 +72,7 @@ func (dao *DAO) All() []*models.Todo {
 		todo := &models.Todo{
 			Id:        id,
 			Item:      item,
-			Completed: completed,
+			Completed: completed == 1,
 			Focused:   focused == 1,
 		}
 
