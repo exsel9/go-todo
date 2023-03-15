@@ -16,12 +16,18 @@
                     {{range .Todos}}
                         {{if .Completed}}
                             <tr>
-                                <td><strike>{{.Item}}</strike></td>
+                                <td><s>{{.Item}}</s></td>
                             </tr>
                         {{else}}
-                            <tr>
-                                <td>{{.Item}}</td>
-                            </tr>
+                            {{if .Focused}}
+                                <tr>
+                                    <td><b>{{.Item}}</b></td>
+                                </tr>
+                            {{else}}
+                                <tr>
+                                    <td>{{.Item}}</td>
+                                </tr>
+                            {{end}}
                         {{end}}
                     {{end}}
                     </tbody>
