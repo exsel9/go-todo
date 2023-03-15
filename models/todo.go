@@ -1,8 +1,8 @@
 package models
 
 type Todo struct {
-	Id        int
+	Id        int64
 	Item      string
-	Completed int
+	Completed bool
 	Focused   bool
 }
