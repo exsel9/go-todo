@@ -56,6 +56,16 @@ func (dao *DAO) All() []*models.Todo {
 	return resultToObject(statement)
 }
 
+func (dao *DAO) Focus() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE focused = 1 AND completed = 0`)
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
 func (dao *DAO) NotCompleted() []*models.Todo {
 	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed = 0`)
 	if err != nil {
