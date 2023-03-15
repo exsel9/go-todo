@@ -27,6 +27,12 @@ func All(w http.ResponseWriter, _ *http.Request) {
 	_ = view.Execute(w, todos)
 }
 
+func Focus(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.Focus()
+
+	_ = view.Execute(w, todos)
+}
+
 func Add(w http.ResponseWriter, r *http.Request) {
 
 	it := r.FormValue("item")

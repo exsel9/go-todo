@@ -10,6 +10,7 @@ func Init() *mux.Router {
 
 	route.HandleFunc("/", controllers.NotCompleted)
 	route.HandleFunc("/all", controllers.All)
+	route.HandleFunc("/focus", controllers.Focus)
 	route.HandleFunc("/ping", controllers.Ping)
 	route.HandleFunc("/add", controllers.Add).Methods("POST")
 
