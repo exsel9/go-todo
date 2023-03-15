@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"github.com/gorilla/mux"
 	"github.com/ichtrojan/go-todo/config"
 	"github.com/ichtrojan/go-todo/item_dao"
 	"github.com/ichtrojan/go-todo/models"
@@ -36,31 +35,11 @@ func Add(w http.ResponseWriter, r *http.Request) {
 		Item: it,
 	})
 
-	http.Redirect(w, r, "/", 302)
-}
-
-func Delete(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	itemDAO.Delete(vars["id"])
-
-	http.Redirect(w, r, "/", 302)
-}
-
-func Complete(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	itemDAO.MarkAsComplete(vars["id"])
-
-	http.Redirect(w, r, "/", 302)
-}
-
-func UnComplete(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	itemDAO.MarkAsUnComplete(vars["id"])
-
-	http.Redirect(w, r, "/", 302)
+	w.Header().Set("Content-Type", "application/json")
+	_, err := io.WriteString(w, `{"status": "success"}`)
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func Ping(w http.ResponseWriter, _ *http.Request) {

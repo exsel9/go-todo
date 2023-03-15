@@ -9,11 +9,8 @@ func Init() *mux.Router {
 	route := mux.NewRouter()
 
 	route.HandleFunc("/", controllers.Show)
-	route.HandleFunc("/add", controllers.Add).Methods("POST")
-	route.HandleFunc("/delete/{id}", controllers.Delete)
-	route.HandleFunc("/complete/{id}", controllers.Complete)
-	route.HandleFunc("/un-complete/{id}", controllers.UnComplete)
 	route.HandleFunc("/ping", controllers.Ping)
+	route.HandleFunc("/add", controllers.Add).Methods("POST")
 
 	return route
 }
