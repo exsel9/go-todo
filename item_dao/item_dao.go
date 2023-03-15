@@ -14,8 +14,8 @@ func New(db *sql.DB) *DAO {
 	return &DAO{db: db}
 }
 
-func (dao *DAO) Add(todo models.Todo) {
-	_, err := dao.db.Exec(`INSERT INTO todos (item) VALUE (?)`, todo.Item)
+func (dao *DAO) Add(item string) {
+	_, err := dao.db.Exec(`INSERT INTO todos (item) VALUE (?)`, item)
 
 	if err != nil {
 		log.Error(err)
@@ -51,6 +51,7 @@ func (dao *DAO) All() []*models.Todo {
 		id        int
 		item      string
 		completed int
+		focused   int
 	)
 
 	statement, err := dao.db.Query(`SELECT * FROM todos`)
@@ -62,7 +63,7 @@ func (dao *DAO) All() []*models.Todo {
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err = statement.Scan(&id, &item, &completed)
+		err = statement.Scan(&id, &item, &completed, &focused)
 
 		if err != nil {
 			log.Error(err)
@@ -72,6 +73,7 @@ func (dao *DAO) All() []*models.Todo {
 			Id:        id,
 			Item:      item,
 			Completed: completed,
+			Focused:   focused == 1,
 		}
 
 		todos = append(todos, todo)

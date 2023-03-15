@@ -34,10 +34,10 @@ func Database() *sql.DB {
 		    id INT AUTO_INCREMENT,
 		    item TEXT NOT NULL,
 		    completed BOOLEAN DEFAULT FALSE,
+		    focused BOOLEAN DEFAULT FALSE,
 		    PRIMARY KEY (id)
 		);
 	`)
-
 	if err != nil {
 		log.Error(err)
 	}

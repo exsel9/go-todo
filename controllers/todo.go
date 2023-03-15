@@ -31,9 +31,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	it := r.FormValue("item")
 	log.WithFields(log.Fields{"description": it}).Info("Add new TodoItem. Saving to database.")
 
-	itemDAO.Add(models.Todo{
-		Item: it,
-	})
+	itemDAO.Add(it)
 
 	w.Header().Set("Content-Type", "application/json")
 	_, err := io.WriteString(w, `{"status": "success"}`)
