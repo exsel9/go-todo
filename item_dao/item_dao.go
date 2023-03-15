@@ -47,6 +47,25 @@ func (dao *DAO) MarkAsUnComplete(id string) {
 }
 
 func (dao *DAO) All() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos`)
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
+func (dao *DAO) NotCompleted() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed = 0`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
+func resultToObject(statement *sql.Rows) []*models.Todo {
 	var (
 		id        int64
 		item      string
@@ -54,16 +73,10 @@ func (dao *DAO) All() []*models.Todo {
 		focused   int
 	)
 
-	statement, err := dao.db.Query(`SELECT * FROM todos`)
-
-	if err != nil {
-		log.Error(err)
-	}
-
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err = statement.Scan(&id, &item, &completed, &focused)
+		err := statement.Scan(&id, &item, &completed, &focused)
 
 		if err != nil {
 			log.Error(err)
