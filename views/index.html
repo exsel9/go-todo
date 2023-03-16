@@ -20,13 +20,25 @@
                             </tr>
                         {{else}}
                             {{if .Focused}}
-                                <tr>
-                                    <td><b>{{.Item}}</b></td>
-                                </tr>
+                                {{if .Repeated}}
+                                    <tr>
+                                        <td><b>{{.Item}}</b> &#128257;</td>
+                                    </tr>
+                                {{else}}
+                                    <tr>
+                                        <td><b>{{.Item}}</b></td>
+                                    </tr>
+                                {{end}}
                             {{else}}
-                                <tr>
-                                    <td>{{.Item}}</td>
-                                </tr>
+                                {{if .Repeated}}
+                                    <tr>
+                                        <td>{{.Item}} &#128257;</td>
+                                    </tr>
+                                {{else}}
+                                    <tr>
+                                        <td>{{.Item}}</td>
+                                    </tr>
+                                {{end}}
                             {{end}}
                         {{end}}
                     {{end}}

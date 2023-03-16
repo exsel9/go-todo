@@ -91,12 +91,13 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 		completed int
 		focused   int
 		deferred  int
+		repeated  int
 	)
 
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err := statement.Scan(&id, &item, &completed, &focused, &deferred)
+		err := statement.Scan(&id, &item, &completed, &focused, &deferred, &repeated)
 
 		if err != nil {
 			log.Error(err)
@@ -108,6 +109,7 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 			Completed: completed == 1,
 			Focused:   focused == 1,
 			Deferred:  deferred == 1,
+			Repeated:  repeated == 1,
 		}
 
 		todos = append(todos, todo)
