@@ -6,4 +6,5 @@ type Todo struct {
 	Completed bool
 	Focused   bool
 	Deferred  bool
+	Repeated  bool
 }
