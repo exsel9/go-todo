@@ -5,4 +5,5 @@ type Todo struct {
 	Item      string
 	Completed bool
 	Focused   bool
+	Deferred  bool
 }

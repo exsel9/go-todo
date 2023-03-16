@@ -75,18 +75,28 @@ func (dao *DAO) NotCompleted() []*models.Todo {
 	return resultToObject(statement)
 }
 
+func (dao *DAO) NotDeferred() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE deferred = 0 AND completed = 0`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
 func resultToObject(statement *sql.Rows) []*models.Todo {
 	var (
 		id        int64
 		item      string
 		completed int
 		focused   int
+		deferred  int
 	)
 
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err := statement.Scan(&id, &item, &completed, &focused)
+		err := statement.Scan(&id, &item, &completed, &focused, &deferred)
 
 		if err != nil {
 			log.Error(err)
@@ -97,6 +107,7 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 			Item:      item,
 			Completed: completed == 1,
 			Focused:   focused == 1,
+			Deferred:  deferred == 1,
 		}
 
 		todos = append(todos, todo)
