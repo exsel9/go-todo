@@ -35,6 +35,7 @@ func Database() *sql.DB {
 		    item TEXT NOT NULL,
 		    completed BOOLEAN DEFAULT FALSE,
 		    focused BOOLEAN DEFAULT FALSE,
+		    deferred BOOLEAN DEFAULT FALSE,
 		    PRIMARY KEY (id)
 		);
 	`)

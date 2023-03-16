@@ -21,6 +21,12 @@ func NotCompleted(w http.ResponseWriter, _ *http.Request) {
 	_ = view.Execute(w, todos)
 }
 
+func NotDeferred(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.NotDeferred()
+
+	_ = view.Execute(w, todos)
+}
+
 func All(w http.ResponseWriter, _ *http.Request) {
 	todos := itemDAO.All()
 
