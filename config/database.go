@@ -35,8 +35,8 @@ func Database() *sql.DB {
 		    item TEXT NOT NULL,
 		    completed BOOLEAN DEFAULT FALSE,
 		    focused BOOLEAN DEFAULT FALSE,
-		    deferred BOOLEAN DEFAULT FALSE,
 		    repeated BOOLEAN DEFAULT FALSE,
+		    postponed_until_date DATE NOT NULL DEFAULT (CURRENT_DATE),
 		    PRIMARY KEY (id)
 		);
 	`)
