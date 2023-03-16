@@ -21,8 +21,14 @@ func NotCompleted(w http.ResponseWriter, _ *http.Request) {
 	_ = view.Execute(w, todos)
 }
 
-func NotDeferred(w http.ResponseWriter, _ *http.Request) {
-	todos := itemDAO.NotDeferred()
+func Postponed(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.Postponed()
+
+	_ = view.Execute(w, todos)
+}
+
+func NotPostponed(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.NotPostponed()
 
 	_ = view.Execute(w, todos)
 }

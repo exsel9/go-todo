@@ -76,8 +76,17 @@ func (dao *DAO) NotCompleted() []*models.Todo {
 	return resultToObject(statement)
 }
 
-func (dao *DAO) NotDeferred() []*models.Todo {
+func (dao *DAO) NotPostponed() []*models.Todo {
 	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed = 0`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
+func (dao *DAO) Postponed() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date > CURRENT_DATE AND completed = 0`)
 	if err != nil {
 		log.Error(err)
 	}

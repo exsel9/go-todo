@@ -10,3 +10,11 @@ type Todo struct {
 	Repeated     bool
 	PostponeDate time.Time
 }
+
+func (t *Todo) GetPostponeDateAsString() string {
+	return t.PostponeDate.Format("2006-02-01")
+}
+
+func (t *Todo) IsPostponed() bool {
+	return t.PostponeDate.After(time.Now())
+}
