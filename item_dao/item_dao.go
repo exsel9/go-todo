@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/ichtrojan/go-todo/models"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 type DAO struct {
@@ -76,7 +77,7 @@ func (dao *DAO) NotCompleted() []*models.Todo {
 }
 
 func (dao *DAO) NotDeferred() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE deferred = 0 AND completed = 0`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed = 0`)
 	if err != nil {
 		log.Error(err)
 	}
@@ -86,30 +87,30 @@ func (dao *DAO) NotDeferred() []*models.Todo {
 
 func resultToObject(statement *sql.Rows) []*models.Todo {
 	var (
-		id        int64
-		item      string
-		completed int
-		focused   int
-		deferred  int
-		repeated  int
+		id            int64
+		item          string
+		completed     int
+		focused       int
+		repeated      int
+		postponedDate time.Time
 	)
 
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err := statement.Scan(&id, &item, &completed, &focused, &deferred, &repeated)
+		err := statement.Scan(&id, &item, &completed, &focused, &repeated, &postponedDate)
 
 		if err != nil {
 			log.Error(err)
 		}
 
 		todo := &models.Todo{
-			Id:        id,
-			Item:      item,
-			Completed: completed == 1,
-			Focused:   focused == 1,
-			Deferred:  deferred == 1,
-			Repeated:  repeated == 1,
+			Id:           id,
+			Item:         item,
+			Completed:    completed == 1,
+			Focused:      focused == 1,
+			Repeated:     repeated == 1,
+			PostponeDate: postponedDate,
 		}
 
 		todos = append(todos, todo)
