@@ -65,6 +65,17 @@ func NotPostponed(w http.ResponseWriter, _ *http.Request) {
 	_ = view.Execute(w, todos)
 }
 
+func NotPostponedNew(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.NotPostponed()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	err := json.NewEncoder(w).Encode(todos)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func All(w http.ResponseWriter, _ *http.Request) {
 	todos := itemDAO.All()
 
