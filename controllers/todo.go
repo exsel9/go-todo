@@ -88,6 +88,17 @@ func Focus(w http.ResponseWriter, _ *http.Request) {
 	_ = view.Execute(w, todos)
 }
 
+func FocusNew(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.Focus()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	err := json.NewEncoder(w).Encode(todos)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func Add(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {

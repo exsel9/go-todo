@@ -15,6 +15,7 @@ func Init() *mux.Router {
 	route.HandleFunc("/todo-completed", controllers.Completed)
 	route.HandleFunc("/all", controllers.All)
 	route.HandleFunc("/focus", controllers.Focus)
+	route.HandleFunc("/todo-focus", controllers.FocusNew)
 	route.HandleFunc("/ping", controllers.Ping)
 	route.HandleFunc("/add", controllers.Add).Methods("POST")
 	route.HandleFunc("/complete/{id}", controllers.Complete).Methods("POST")
