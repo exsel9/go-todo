@@ -40,6 +40,17 @@ func Completed(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
+func CompletedToday(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.CompletedToday()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	err := json.NewEncoder(w).Encode(todos)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func Complete(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
