@@ -8,15 +8,7 @@ import (
 func Init() *mux.Router {
 	route := mux.NewRouter()
 
-	route.HandleFunc("/", controllers.NotPostponed)
-	route.HandleFunc("/postponed", controllers.Postponed)
-	route.HandleFunc("/not-postponed", controllers.NotPostponedNew)
-	route.HandleFunc("/todo-incomplete", controllers.NotCompleted)
-	route.HandleFunc("/todo-completed", controllers.CompletedToday)
-	route.HandleFunc("/all", controllers.All)
-	route.HandleFunc("/focus", controllers.Focus)
-	route.HandleFunc("/todo-focus", controllers.FocusNew)
-	route.HandleFunc("/ping", controllers.Ping)
+	route.HandleFunc("/today", controllers.Today)
 	route.HandleFunc("/add", controllers.Add).Methods("POST")
 	route.HandleFunc("/complete/{id}", controllers.Complete).Methods("POST")
 

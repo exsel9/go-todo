@@ -100,6 +100,16 @@ func (dao *DAO) CompletedToday() []*models.Todo {
 	return resultToObject(statement)
 }
 
+func (dao *DAO) Today() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed_date = CURRENT_DATE 
+                       OR (completed_date IS NULL AND postponed_until_date <= CURRENT_DATE)`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
 func (dao *DAO) NotPostponed() []*models.Todo {
 	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed = 0`)
 	if err != nil {
