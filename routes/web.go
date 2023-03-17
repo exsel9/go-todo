@@ -16,6 +16,7 @@ func Init() *mux.Router {
 	route.HandleFunc("/focus", controllers.Focus)
 	route.HandleFunc("/ping", controllers.Ping)
 	route.HandleFunc("/add", controllers.Add).Methods("POST")
+	route.HandleFunc("/complete/{id}", controllers.Complete).Methods("POST")
 
 	return route
 }
