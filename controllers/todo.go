@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/ichtrojan/go-todo/config"
 	"github.com/ichtrojan/go-todo/item_dao"
 	log "github.com/sirupsen/logrus"
@@ -46,14 +47,19 @@ func Focus(w http.ResponseWriter, _ *http.Request) {
 }
 
 func Add(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Error(err)
+	}
 
-	it := r.FormValue("item")
-	log.WithFields(log.Fields{"description": it}).Info("Add new TodoItem. Saving to database.")
+	it := r.Form["item"][0]
+	log.WithFields(log.Fields{"item": it}).Info("Add new TodoItem. Saving to database.")
 
-	itemDAO.Add(it)
+	id := itemDAO.Add(it)
 
 	w.Header().Set("Content-Type", "application/json")
-	_, err := io.WriteString(w, `{"status": "success"}`)
+	resp := fmt.Sprintf(`{"status": "success", "id": %d}`, id)
+	_, err = io.WriteString(w, resp)
 	if err != nil {
 		log.Error(err)
 	}
