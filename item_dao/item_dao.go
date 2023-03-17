@@ -15,12 +15,18 @@ func New(db *sql.DB) *DAO {
 	return &DAO{db: db}
 }
 
-func (dao *DAO) Add(item string) {
-	_, err := dao.db.Exec(`INSERT INTO todos (item) VALUE (?)`, item)
-
+func (dao *DAO) Add(item string) int64 {
+	result, err := dao.db.Exec(`INSERT INTO todos (item) VALUE (?)`, item)
 	if err != nil {
 		log.Error(err)
 	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		log.Error(err)
+	}
+
+	return id
 }
 
 func (dao *DAO) Delete(id string) {
