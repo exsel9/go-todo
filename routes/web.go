@@ -12,7 +12,7 @@ func Init() *mux.Router {
 	route.HandleFunc("/postponed", controllers.Postponed)
 	route.HandleFunc("/not-postponed", controllers.NotPostponedNew)
 	route.HandleFunc("/todo-incomplete", controllers.NotCompleted)
-	route.HandleFunc("/todo-completed", controllers.Completed)
+	route.HandleFunc("/todo-completed", controllers.CompletedToday)
 	route.HandleFunc("/all", controllers.All)
 	route.HandleFunc("/focus", controllers.Focus)
 	route.HandleFunc("/todo-focus", controllers.FocusNew)

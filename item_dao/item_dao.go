@@ -38,7 +38,7 @@ func (dao *DAO) Delete(id string) {
 }
 
 func (dao *DAO) MarkAsComplete(id string) {
-	_, err := dao.db.Exec(`UPDATE todos SET completed = 1 WHERE id = ?`, id)
+	_, err := dao.db.Exec(`UPDATE todos SET completed = 1, completed_date = CURRENT_DATE WHERE id = ?`, id)
 
 	if err != nil {
 		log.Error(err)
@@ -91,6 +91,15 @@ func (dao *DAO) Completed() []*models.Todo {
 	return resultToObject(statement)
 }
 
+func (dao *DAO) CompletedToday() []*models.Todo {
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed_date = CURRENT_DATE`)
+	if err != nil {
+		log.Error(err)
+	}
+
+	return resultToObject(statement)
+}
+
 func (dao *DAO) NotPostponed() []*models.Todo {
 	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed = 0`)
 	if err != nil {
@@ -117,24 +126,26 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 		focused       int
 		repeated      int
 		postponedDate time.Time
+		competedDate  *time.Time
 	)
 
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err := statement.Scan(&id, &item, &completed, &focused, &repeated, &postponedDate)
+		err := statement.Scan(&id, &item, &completed, &focused, &repeated, &postponedDate, &competedDate)
 
 		if err != nil {
 			log.Error(err)
 		}
 
 		todo := &models.Todo{
-			Id:           id,
-			Item:         item,
-			Completed:    completed == 1,
-			Focused:      focused == 1,
-			Repeated:     repeated == 1,
-			PostponeDate: postponedDate,
+			Id:            id,
+			Item:          item,
+			Completed:     competedDate != nil,
+			Focused:       focused == 1,
+			Repeated:      repeated == 1,
+			PostponeDate:  postponedDate,
+			CompletedDate: competedDate,
 		}
 
 		todos = append(todos, todo)
