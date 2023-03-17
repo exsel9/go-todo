@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ichtrojan/go-todo/config"
 	"github.com/ichtrojan/go-todo/item_dao"
@@ -19,7 +20,23 @@ var (
 func NotCompleted(w http.ResponseWriter, _ *http.Request) {
 	todos := itemDAO.NotCompleted()
 
-	_ = view.Execute(w, todos)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	err := json.NewEncoder(w).Encode(todos)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
+func Completed(w http.ResponseWriter, _ *http.Request) {
+	todos := itemDAO.Completed()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	err := json.NewEncoder(w).Encode(todos)
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func Postponed(w http.ResponseWriter, _ *http.Request) {

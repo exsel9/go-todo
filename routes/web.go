@@ -9,8 +9,9 @@ func Init() *mux.Router {
 	route := mux.NewRouter()
 
 	route.HandleFunc("/", controllers.NotPostponed)
-	route.HandleFunc("/not-completed", controllers.NotCompleted)
 	route.HandleFunc("/postponed", controllers.Postponed)
+	route.HandleFunc("/todo-incomplete", controllers.NotCompleted)
+	route.HandleFunc("/todo-completed", controllers.Completed)
 	route.HandleFunc("/all", controllers.All)
 	route.HandleFunc("/focus", controllers.Focus)
 	route.HandleFunc("/ping", controllers.Ping)
