@@ -45,7 +45,7 @@ func (dao *DAO) MarkAsComplete(id string) {
 	}
 }
 
-func (dao *DAO) MarkAsUnComplete(id string) {
+func (dao *DAO) MarkAsIncomplete(id string) {
 	_, err := dao.db.Exec(`UPDATE todos SET completed_date = NULL WHERE id = ?`, id)
 
 	if err != nil {
