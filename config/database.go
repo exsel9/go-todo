@@ -33,7 +33,6 @@ func Database() *sql.DB {
 		CREATE TABLE IF NOT EXISTS todos (
 		    id INT AUTO_INCREMENT,
 		    item TEXT NOT NULL,
-		    completed BOOLEAN DEFAULT FALSE,
 		    focused BOOLEAN DEFAULT FALSE,
 		    repeated BOOLEAN DEFAULT FALSE,
 		    postponed_until_date DATE NOT NULL DEFAULT (CURRENT_DATE),
