@@ -38,7 +38,7 @@ func (dao *DAO) Delete(id string) {
 }
 
 func (dao *DAO) MarkAsComplete(id string) {
-	_, err := dao.db.Exec(`UPDATE todos SET completed = 1, completed_date = CURRENT_DATE WHERE id = ?`, id)
+	_, err := dao.db.Exec(`UPDATE todos SET completed_date = CURRENT_DATE WHERE id = ?`, id)
 
 	if err != nil {
 		log.Error(err)
@@ -46,7 +46,7 @@ func (dao *DAO) MarkAsComplete(id string) {
 }
 
 func (dao *DAO) MarkAsUnComplete(id string) {
-	_, err := dao.db.Exec(`UPDATE todos SET completed = 0 WHERE id = ?`, id)
+	_, err := dao.db.Exec(`UPDATE todos SET completed_date = NULL WHERE id = ?`, id)
 
 	if err != nil {
 		log.Error(err)
@@ -64,7 +64,7 @@ func (dao *DAO) All() []*models.Todo {
 }
 
 func (dao *DAO) Focus() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE focused = 1 AND completed = 0`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE focused = 1 AND completed_date IS NULL`)
 
 	if err != nil {
 		log.Error(err)
@@ -74,7 +74,7 @@ func (dao *DAO) Focus() []*models.Todo {
 }
 
 func (dao *DAO) NotCompleted() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed = 0`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed_date IS NULL`)
 	if err != nil {
 		log.Error(err)
 	}
@@ -83,7 +83,7 @@ func (dao *DAO) NotCompleted() []*models.Todo {
 }
 
 func (dao *DAO) Completed() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed = 1`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed_date IS NOT NULL`)
 	if err != nil {
 		log.Error(err)
 	}
@@ -111,7 +111,7 @@ func (dao *DAO) Today() []*models.Todo {
 }
 
 func (dao *DAO) NotPostponed() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed = 0`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date <= CURRENT_DATE AND completed_date IS NULL`)
 	if err != nil {
 		log.Error(err)
 	}
@@ -120,7 +120,7 @@ func (dao *DAO) NotPostponed() []*models.Todo {
 }
 
 func (dao *DAO) Postponed() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date > CURRENT_DATE AND completed = 0`)
+	statement, err := dao.db.Query(`SELECT * FROM todos WHERE postponed_until_date > CURRENT_DATE AND completed_date IS NULL`)
 	if err != nil {
 		log.Error(err)
 	}
@@ -132,7 +132,6 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 	var (
 		id            int64
 		item          string
-		completed     int
 		focused       int
 		repeated      int
 		postponedDate time.Time
@@ -142,7 +141,7 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 	var todos []*models.Todo
 
 	for statement.Next() {
-		err := statement.Scan(&id, &item, &completed, &focused, &repeated, &postponedDate, &competedDate)
+		err := statement.Scan(&id, &item, &focused, &repeated, &postponedDate, &competedDate)
 
 		if err != nil {
 			log.Error(err)
@@ -151,7 +150,6 @@ func resultToObject(statement *sql.Rows) []*models.Todo {
 		todo := &models.Todo{
 			Id:            id,
 			Item:          item,
-			Completed:     competedDate != nil,
 			Focused:       focused == 1,
 			Repeated:      repeated == 1,
 			PostponeDate:  postponedDate,
