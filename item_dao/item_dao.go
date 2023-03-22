@@ -63,14 +63,20 @@ func (dao *DAO) All() []*models.Todo {
 	return resultToObject(statement)
 }
 
-func (dao *DAO) Focus() []*models.Todo {
-	statement, err := dao.db.Query(`SELECT * FROM todos WHERE focused = 1 AND completed_date IS NULL`)
+func (dao *DAO) MarkAsFocus(id string) {
+	_, err := dao.db.Exec(`UPDATE todos SET focused = 1 WHERE id = ?`, id)
 
 	if err != nil {
 		log.Error(err)
 	}
+}
 
-	return resultToObject(statement)
+func (dao *DAO) MarkAsUnfocused(id string) {
+	_, err := dao.db.Exec(`UPDATE todos SET focused = 0 WHERE id = ?`, id)
+
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func (dao *DAO) NotCompleted() []*models.Todo {
