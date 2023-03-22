@@ -13,6 +13,8 @@ func Init() *mux.Router {
 	route.HandleFunc("/complete/{id}", controllers.Complete).Methods("POST")
 	route.HandleFunc("/incomplete/{id}", controllers.Incomplete).Methods("POST")
 	route.HandleFunc("/delete/{id}", controllers.Delete).Methods("POST")
+	route.HandleFunc("/focus/{id}", controllers.Focus).Methods("POST")
+	route.HandleFunc("/unfocused/{id}", controllers.Unfocused).Methods("POST")
 
 	return route
 }

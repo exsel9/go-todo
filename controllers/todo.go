@@ -66,6 +66,32 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Focus(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	itemDAO.MarkAsFocus(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	_, err := io.WriteString(w, `{"status": "success"}`)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
+func Unfocused(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	itemDAO.MarkAsUnfocused(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	_, err := io.WriteString(w, `{"status": "success"}`)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func Add(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
