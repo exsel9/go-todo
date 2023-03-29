@@ -92,6 +92,19 @@ func Unfocused(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Postpone(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	itemDAO.Postpone(id)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	_, err := io.WriteString(w, `{"status": "success"}`)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func Add(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {

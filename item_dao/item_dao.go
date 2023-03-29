@@ -79,6 +79,14 @@ func (dao *DAO) MarkAsUnfocused(id string) {
 	}
 }
 
+func (dao *DAO) Postpone(id string) {
+	_, err := dao.db.Exec(`UPDATE todos SET postponed_until_date = CURRENT_DATE + 1 WHERE id = ?`, id)
+
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func (dao *DAO) NotCompleted() []*models.Todo {
 	statement, err := dao.db.Query(`SELECT * FROM todos WHERE completed_date IS NULL`)
 	if err != nil {
