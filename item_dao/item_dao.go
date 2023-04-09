@@ -45,6 +45,20 @@ func (dao *DAO) MarkAsComplete(id string) {
 	}
 }
 
+func (dao *DAO) Complete(id string) {
+	_, err := dao.db.Exec(`INSERT INTO completed (id, item) SELECT id, item from todos WHERE id = ?`, id)
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	_, err = dao.db.Exec(`DELETE FROM todos WHERE id = ?;`, id)
+
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func (dao *DAO) MarkAsIncomplete(id string) {
 	_, err := dao.db.Exec(`UPDATE todos SET completed_date = NULL WHERE id = ?`, id)
 

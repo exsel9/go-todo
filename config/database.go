@@ -44,6 +44,18 @@ func Database() *sql.DB {
 		log.Error(err)
 	}
 
+	_, err = database.Exec(`
+		CREATE TABLE IF NOT EXISTS completed (
+		    id INT NOT NULL,
+            item TEXT NOT NULL,
+            completed_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+            PRIMARY KEY (id)
+		);
+	`)
+	if err != nil {
+		log.Error(err)
+	}
+
 	return database
 }
 
